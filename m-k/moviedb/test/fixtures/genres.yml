@@ -1,0 +1,12 @@
+---
+crime:
+  name: Crime
+  slug: crime
+
+drama:
+  name: Drama
+  slug: drama
+
+western:
+  name: Western
+  slug: western

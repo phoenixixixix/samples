@@ -1,0 +1,15 @@
+---
+admin_shawshank_redemption:
+  rate: 8
+  movie: shawshank_redemption
+  user: admin
+
+user_shawshank_redemption:
+  rate: 5
+  movie: shawshank_redemption
+  user: user
+
+user_godfather:
+  rate: 10
+  movie: godfather
+  user: user

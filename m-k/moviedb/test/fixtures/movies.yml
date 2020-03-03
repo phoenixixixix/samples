@@ -1,0 +1,39 @@
+---
+shawshank_redemption:
+  :title: The Shawshank Redemption
+  :slug: the-shawshank-redemption
+  :poster: https://example.com/images/M/the_shawshank_redemption_SX300.jpg
+  :plot: The Shawshank Redemption description
+  genres:
+    - drama
+godfather:
+  :title: The Godfather
+  :slug: the-godfather
+  :poster: https://example.com/images/M/the_godfather_SX300.jpg
+  :plot: The Godfather description
+  genres:
+    - crime
+    - drama
+godfather_ii:
+  :title: 'The Godfather: Part II'
+  :slug: 'the-godfather-part-ii'
+  :poster: https://example.com/images/M/the_godfather_part_ii_SX300.jpg
+  :plot: 'The Godfather: Part II Description'
+  genres:
+    - crime
+    - drama
+pulp_fiction:
+  :title: Pulp Fiction
+  :slug: pulp-fiction
+  :poster: https://example.com/images/M/pulp_fiction_SX300.jpg
+  :plot: Pulp fiction descriptions
+  genres:
+    - crime
+    - drama
+good_bad_ugly:
+  :title: The Good, the Bad and the Ugly
+  :slug: the-good-the-bad-and-the-ugly
+  :poster: https://example.com/images/M/the_good_the_bad_and_the_ugly_SX300.jpg
+  :plot: The Good, the Bad and the Ugly description
+  genres:
+    - western

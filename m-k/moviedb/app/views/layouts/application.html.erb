@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Movie db</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%= action_cable_meta_tag %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_pack_tag 'application', media: 'all' %>
+    <%= javascript_pack_tag 'application' %>
+  </head>
+
+  <body>
+    <div class="container">
+      <header class="moviedb-header py-3 mb-5">
+        <div class="row flex-nowrap justify-content-between align-items-center">
+          <div class="d-none d-sm-inline col-sm-4 pt-1">
+            <span class="text-muted"><%= t(:app_description) %></span>
+          </div>
+          <div class="col-sm-4 text-sm-center">
+            <%= link_to t(:app_name), root_path, class: 'moviedb-header-logo text-dark' %>
+          </div>
+          <div class="col-2 col-sm-4 d-flex justify-content-end align-items-center">
+            <% if current_user %>
+              <%= link_to t(:sign_out), destroy_user_session_path, class: 'btn btn-sm btn-outline-secondary text-nowrap', method: :delete %>
+            <% else %>
+              <%= link_to t(:sign_in), new_user_session_path, class: 'btn btn-sm btn-outline-secondary text-nowrap' %>
+            <% end %>
+          </div>
+        </div>
+      </header>
+      <main role="main">
+        <%= yield %>
+      </main>
+    </div>
+    <footer class="moviedb-footer">
+      <p>
+        <a href="#">Back to top</a>
+      </p>
+    </footer>
+  </body>
+</html>

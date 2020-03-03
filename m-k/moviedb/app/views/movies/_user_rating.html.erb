@@ -1,0 +1,5 @@
+<p>
+  <%= form_for movie, remote: true do %>
+    <input name="rate" type="number" class="js-user-rating" value="<%= movie.rate %>">
+  <% end %>
+</p>

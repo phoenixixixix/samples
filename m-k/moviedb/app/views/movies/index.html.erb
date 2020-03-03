@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="mb-4 moviedb-genres-filter">
+    <% @genres.each do |genre| %>
+      <%= link_to genre.name,
+                  genre_movies_path(genre.slug),
+                  class: ['mt-2 ml-2 btn btn-outline-primary moviedb-genres-filter-item',
+                          ('active' if genre.slug == params[:genre_slug])] %>
+    <% end %>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <% @movies.each do |movie| %>
+    <div class="col-lg-6">
+      <div class="card flex-sm-row mb-4 box-shadow h-md-250" data-movie-id="<%= movie.id %>">
+        <div class="card-body d-flex flex-column align-items-start">
+          <h3 class="mb-0 moviedb-card-title">
+            <%= link_to movie.title, movie, class: 'text-dark' %>
+          </h3>
+          <%= render 'movie_rating', rating: movie.rating %>
+          <p class="card-text mb-auto">
+            <%= render 'movie_genres', movie: movie %>
+          </p>
+          <%= render('user_rating', movie: movie) if current_user %>
+        </div>
+        <img class="card-img-right flex-auto d-none d-sm-block" alt="Thumbnail [200x250]" style="width: 180px; height: 250px;" src="<%= movie.poster %>" data-holder-rendered="true">
+      </div>
+    </div>
+  <% end %>
+  <%= paginate @movies, theme: 'twitter-bootstrap-4', nav_class: 'col-12' %>
+</div>

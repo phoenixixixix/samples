@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-md-4 text-center">
+    <% if @movie.poster.present? %>
+      <%= image_tag @movie.poster, class: 'img-thumbnail' %>
+    <% else %>
+      <%= image_tag "https://via.placeholder.com/300x445.png?text=#{@movie.title}", class: 'img-thumbnail' %>
+    <% end %>
+  </div>
+  <div class="col-md-8 moviedb-main">
+    <div class="moviedb-post" data-movie-id="<%= @movie.id %>">
+      <h2 class="moviedb-post-title"><%= @movie.title %></h2>
+      <p class="moviedb-post-meta">
+        <%= render 'movie_rating', rating: @movie.rating %>
+      </p>
+      <p><%= render 'movie_genres', movie: @movie %></p>
+      <p><%= @movie.plot %></p>
+      <%= render('user_rating', movie: @movie) if current_user %>
+    </div>
+  </div>
+</div>
