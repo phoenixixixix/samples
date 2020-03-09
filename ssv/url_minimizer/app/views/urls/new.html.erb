@@ -1,0 +1,42 @@
+<h1> Please, fill this form  </h1>
+<%= form_with(model: @url, local: true) do |form| %>
+  <% if @url.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@url.errors.count, "error") %> prohibited this url from being saved:</h2>
+
+      <ul>
+      <% @url.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :long_url, for: "inputLongUrl" %>
+    <small id="longUrlHelp" class="form-text text-muted">Required</small>
+    <%= form.text_field :long_url, id: :inputLongUrl, placeholder: "Enter full URL", class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :short_url, for: "inputShortUrl" %>
+    <small id="shortUrlHelp" class="form-text text-muted">Optional</small>
+    <%= form.text_field :short_url, id: :inputShortUrl, placeholder: "Enter short link", class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :life_term, for: "inputLifeTerm" %>
+    <small id="shortUrlHelp" class="form-text text-muted">Optional</small>
+    <%= form.text_field :life_term, id: :inputLifeTerm, placeholder: "Enter life term for short link (in seconds)", class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :delay_time, for: "inputDelayTime" %>
+    <%= form.text_field :delay_time, id: :inputDelayTime, placeholder: "Enter delay time for short link (in seconds)", class: "form-control" %>
+  </div>
+
+  <%= form.hidden_field :user_id, value: current_user.id %>
+
+  <%= form.submit "Convert", class: "btn btn-primary" %>
+<% end %>
+

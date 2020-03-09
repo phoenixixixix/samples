@@ -1,0 +1,10 @@
+development:
+  adapter: async
+
+test:
+  adapter: async
+
+production:
+  adapter: redis
+  url: redis://redistogo:35fe81c3a583f8ac5e181b730907a7af@soldierfish.redistogo.com:11022/
+  channel_prefix: url_minimizer_production

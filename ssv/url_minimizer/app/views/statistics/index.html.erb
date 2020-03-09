@@ -1,0 +1,18 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Gadget</th>
+      <th scope="col">Browser</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @statistics.each do |st| %>
+      <tr>
+        <td><%= st.stat_date %></td>
+        <td><%= st.gadget %></td>
+        <td><%= st.browser %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
