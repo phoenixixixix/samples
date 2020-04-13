@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "required": ["collection"],
+  "properties": {
+    "collection": {
+      "type": "object",
+      "required": ["data", "total_pages", "current_page"],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "body", "likes_count", "published_at", "liked_by_me"],
+            "properties": {
+              "id": { "type": "integer" },
+              "body": { "type": "string" },
+              "likes_count": { "type": "integer" },
+              "published_at": { "type": "date-time" },
+              "liked_by_me": { "type": "boolean" }
+            }
+          }
+        },
+        "total_pages": { "type": "integer" },
+        "current_page": { "type": "integer" }
+      }
+    }
+  }
+}
