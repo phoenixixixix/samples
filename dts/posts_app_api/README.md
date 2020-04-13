@@ -1,5 +1,12 @@
 # README
 
+## Task description
+Task description can be found in [REQUIREMENTS.md](https://github.com/jetthoughts/samples/tree/master/dts/posts_app_api/doc/REQUIREMENTS.md)
+
+The key point of this task is to design and implement an API for a hypothetical mobile app. Key endpoints for list of 
+posts/comments and ability to like a post are implemented here and covered with request tests, while out of the scope things like users authentication 
+endpoint is more like a mock up.
+
 ## Requirements
 
  * Ruby 2.6.5
