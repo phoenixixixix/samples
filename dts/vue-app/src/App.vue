@@ -15,16 +15,6 @@
             <v-list-item-title>Test My Device</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-
-        <v-list-item link>
-          <v-list-item-action>
-            <v-icon>mdi-contact-mail</v-icon>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>Contact</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
@@ -33,10 +23,8 @@
       color="cyan"
       dark
     >
-      <v-spacer />
-
       <v-toolbar-title>Application</v-toolbar-title>
-
+      <v-spacer />
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
     </v-app-bar>
 
@@ -46,43 +34,53 @@
         fluid
       >
         <v-row
+                align="center"
+                justify="center"
+        >
+          <h1>Test my Device</h1>
+        </v-row>
+        <v-row
           align="center"
           justify="center"
         >
-          <v-row>
-            <v-col class="text-center">
-              Test my Device
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
+          <v-col>
+            <div v-if="cameraSwitch">
               <WebCam
                 ref="webcam"
-                :deviceId="deviceId"
-                width="auto"
-                height="100%"
-                @cameras="onCameras"
-                @camera-change="onCameraChange"
-                :isFrontCam="frontCam"
+                width="640px"
+                height="480px"
+                @started="onStarted"
+                @stopped="onStopped"
               >
               </WebCam>
-            </v-col>
-            <v-col>
-              <v-row>
-                <v-switch
-                  v-model="cameraSwitch"
-                  @change="onCameraSwitch"
-                  :label="`Camera: ${cameraSwitch ? 'On' : 'Off'}`"
-                ></v-switch>
+            </div>
+            <div v-else>
+              <img width="640px" height="480px" :src="require('./assets/no-video.svg')">
+            </div>
+          </v-col>
+          <v-col>
+              <v-row align="center"
+                     justify="center">
+                <v-col><v-icon>mdi-camera</v-icon>Camera</v-col>
+                <v-col>
+                  <v-switch
+                    v-model="cameraSwitch"
+                    @change="onCameraSwitch"
+                    :label="`${cameraSwitch ? 'On' : 'Off'}`"
+                  ></v-switch>
+                </v-col>
               </v-row>
-              <v-row>
-                <v-switch
-                  v-model="micSwitch"
-                  :label="`Microphone: ${micSwitch ? 'On' : 'Off'}`"
-                ></v-switch>
+              <v-row align="center"
+                     justify="center">
+                <v-col><v-icon>mdi-microphone</v-icon>Microphone</v-col>
+                <v-col>
+                  <v-switch
+                          v-model="micSwitch"
+                          :label="`${micSwitch ? 'On' : 'Off'}`"
+                  ></v-switch>
+                </v-col>
               </v-row>
             </v-col>
-          </v-row>
         </v-row>
       </v-container>
     </v-content>
@@ -104,8 +102,10 @@
     name: 'AppVue',
     data () {
       return {
+        drawer: false,
         cameraSwitch: true,
-        micSwitch: false,
+        micSwitch: true,
+        cameraStarted: false,
         captures: [],
         imgReport: [],
         frontCam: false,
@@ -127,12 +127,12 @@
           this.$refs.webcam.stop()
         }
       },
-      onStart () {
-        this.$refs.webcam.start()
+      onStarted () {
+        this.cameraStarted = true
       },
-      onStop () {
-        this.$refs.webcam.stop()
-      },
+      onStopped () {
+        this.cameraStarted = false
+      }
     }
   }
 </script>
