@@ -72,10 +72,20 @@
               </v-row>
               <v-row align="center"
                      justify="center">
-                <v-col><v-icon>mdi-microphone</v-icon>Microphone</v-col>
+                <v-col>
+                  <v-row>
+                    <v-icon>mdi-microphone</v-icon>Microphone
+                  </v-row>
+                  <v-row>
+                    <div style="width: 100px">
+                      <v-progress-linear :value="micLevel" :active="micSwitch"></v-progress-linear>
+                    </div>
+                  </v-row>
+                </v-col>
                 <v-col>
                   <v-switch
                           v-model="micSwitch"
+                          @change="onMicSwitch"
                           :label="`${micSwitch ? 'On' : 'Off'}`"
                   ></v-switch>
                 </v-col>
@@ -100,8 +110,13 @@
   import { WebCam } from 'vue-cam-vision'
   export default {
     name: 'AppVue',
+    mounted () {
+      navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+              .then(this.getMicLevel.bind(this, this))
+    },
     data () {
       return {
+        micLevel: 0,
         drawer: false,
         cameraSwitch: true,
         micSwitch: true,
@@ -120,6 +135,17 @@
       WebCam
     },
     methods: {
+      onMicSwitch (value) {
+        if(value) {
+          navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(this.getMicLevel.bind(this, this))
+        } else {
+          navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
+            stream.getAudioTracks().forEach(function(track) {
+              track.stop();
+            })
+          })
+        }
+      },
       onCameraSwitch (value) {
         if(value) {
           this.$refs.webcam.start()
@@ -132,6 +158,36 @@
       },
       onStopped () {
         this.cameraStarted = false
+      },
+      getMicLevel (self, stream) {
+        let audioContext = new AudioContext();
+        let analyser = audioContext.createAnalyser();
+        let microphone = audioContext.createMediaStreamSource(stream);
+        let javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+
+        analyser.smoothingTimeConstant = 0.8;
+        analyser.fftSize = 1024;
+
+        microphone.connect(analyser);
+        analyser.connect(javascriptNode);
+        javascriptNode.connect(audioContext.destination);
+        javascriptNode.onaudioprocess = function() {
+          var array = new Uint8Array(analyser.frequencyBinCount);
+          analyser.getByteFrequencyData(array);
+          var values = 0;
+
+          var length = array.length;
+          for (var i = 0; i < length; i++) {
+            values += (array[i]);
+          }
+
+          var average = values / length;
+
+          self.micLevel = Math.round(average)
+          // console.log('this.micLevel', this.micLevel)
+          // console.log(Math.round(average));
+          // colorPids(average);
+        }
       }
     }
   }
