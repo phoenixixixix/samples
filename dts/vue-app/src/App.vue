@@ -59,38 +59,62 @@
             </div>
           </v-col>
           <v-col>
-              <v-row align="center"
-                     justify="center">
-                <v-col><v-icon>mdi-camera</v-icon>Camera</v-col>
-                <v-col>
-                  <v-switch
-                    v-model="cameraSwitch"
-                    @change="onCameraSwitch"
-                    :label="`${cameraSwitch ? 'On' : 'Off'}`"
-                  ></v-switch>
-                </v-col>
-              </v-row>
-              <v-row align="center"
-                     justify="center">
-                <v-col>
-                  <v-row>
+            <v-row align="center"
+                   justify="center">
+              <v-col><v-icon>mdi-camera</v-icon>Camera</v-col>
+              <v-col>
+                <v-switch
+                  v-model="cameraSwitch"
+                  @change="onCameraSwitch"
+                  :label="`${cameraSwitch ? 'On' : 'Off'}`"
+                ></v-switch>
+              </v-col>
+            </v-row>
+            <v-row align="center" justify="center">
+              <v-col>
+                <v-row>
+                  <v-col>
                     <v-icon>mdi-microphone</v-icon>Microphone
-                  </v-row>
-                  <v-row>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
                     <div style="width: 100px">
                       <v-progress-linear :value="micLevel" :active="micSwitch"></v-progress-linear>
                     </div>
-                  </v-row>
-                </v-col>
-                <v-col>
-                  <v-switch
-                          v-model="micSwitch"
-                          @change="onMicSwitch"
-                          :label="`${micSwitch ? 'On' : 'Off'}`"
-                  ></v-switch>
-                </v-col>
-              </v-row>
-            </v-col>
+                  </v-col>
+                </v-row>
+              </v-col>
+              <v-col>
+                <v-switch
+                        v-model="micSwitch"
+                        @change="onMicSwitch"
+                        :label="`${micSwitch ? 'On' : 'Off'}`"
+                ></v-switch>
+              </v-col>
+            </v-row>
+            <v-row align="center" justify="center">
+              <v-col>
+                <v-row>
+                  <v-col>
+                    <v-icon>mdi-wifi</v-icon>Connectivity
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <div style="width: 100%">
+                      <v-progress-linear :value="0"></v-progress-linear>
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+            <v-row align="center">
+              <v-col>
+                <v-btn :block="true">Run Test</v-btn>
+              </v-col>
+            </v-row>
+          </v-col>
         </v-row>
       </v-container>
     </v-content>
