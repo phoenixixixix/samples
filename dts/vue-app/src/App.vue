@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
     <v-navigation-drawer
-      v-model="drawer"
+      v-model="sideMenuOpened"
       app
       right
     >
@@ -25,7 +25,7 @@
     >
       <v-toolbar-title>Application</v-toolbar-title>
       <v-spacer />
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-app-bar-nav-icon @click.stop="toggleSideMenu" />
     </v-app-bar>
 
     <v-content>
@@ -49,8 +49,6 @@
                 ref="webcam"
                 width="640px"
                 height="480px"
-                @started="onStarted"
-                @stopped="onStopped"
               >
               </WebCam>
             </div>
@@ -65,8 +63,7 @@
               <v-col>
                 <v-switch
                   v-model="cameraSwitch"
-                  @change="onCameraSwitch"
-                  :label="`${cameraSwitch ? 'On' : 'Off'}`"
+                  @change="onCameraToggle"
                 ></v-switch>
               </v-col>
             </v-row>
@@ -79,9 +76,8 @@
               </v-col>
               <v-col>
                 <v-switch
-                        v-model="micSwitch"
-                        @change="onMicSwitch"
-                        :label="`${micSwitch ? 'On' : 'Off'}`"
+                  v-model="micSwitch"
+                  @change="onMicToggle"
                 ></v-switch>
               </v-col>
             </v-row>
@@ -124,86 +120,55 @@
 
 <script>
   import { WebCam } from 'vue-cam-vision'
+  import { addVolumeLevelListener } from './lib/soundUtils.js'
+
   export default {
     name: 'AppVue',
     mounted () {
-      navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-              .then(this.getMicLevel.bind(this, this))
+      this.startListeningToMic()
     },
     data () {
       return {
         micLevel: 0,
-        drawer: false,
+        sideMenuOpened: false,
         cameraSwitch: true,
         micSwitch: true,
-        cameraStarted: false,
-        captures: [],
-        imgReport: [],
-        frontCam: false,
-        webcam: null,
-        img: null,
-        camera: null,
-        deviceId: null,
-        devices: []
       }
     },
     components: {
       WebCam
     },
     methods: {
-      onMicSwitch (value) {
+      toggleSideMenu () {
+        this.sideMenuOpened = !this.sideMenuOpened
+      },
+      onMicToggle (value) {
         if(value) {
-          navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(this.getMicLevel.bind(this, this))
+          this.startListeningToMic()
         } else {
-          navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
-            stream.getAudioTracks().forEach(function(track) {
-              track.stop();
-            })
-          })
+          this.stopListeningToMic()
         }
       },
-      onCameraSwitch (value) {
+      startListeningToMic () {
+        navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+                .then(stream => addVolumeLevelListener(stream, this.onMicLevelChange))
+      },
+      stopListeningToMic () {
+        navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
+          stream.getAudioTracks().forEach(function(track) {
+            track.stop();
+          })
+        })
+      },
+      onCameraToggle (value) {
         if(value) {
           this.$refs.webcam.start()
         } else {
           this.$refs.webcam.stop()
         }
       },
-      onStarted () {
-        this.cameraStarted = true
-      },
-      onStopped () {
-        this.cameraStarted = false
-      },
-      getMicLevel (self, stream) {
-        let audioContext = new AudioContext();
-        let analyser = audioContext.createAnalyser();
-        let microphone = audioContext.createMediaStreamSource(stream);
-        let javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
-
-        analyser.smoothingTimeConstant = 0.8;
-        analyser.fftSize = 1024;
-
-        microphone.connect(analyser);
-        analyser.connect(javascriptNode);
-        javascriptNode.connect(audioContext.destination);
-        javascriptNode.onaudioprocess = function() {
-          var array = new Uint8Array(analyser.frequencyBinCount);
-          analyser.getByteFrequencyData(array);
-          var values = 0;
-
-          var length = array.length;
-          for (var i = 0; i < length; i++) {
-            values += (array[i]);
-          }
-
-          var average = values / length;
-
-          self.micLevel = Math.round(average)
-          // console.log('this.micLevel', this.micLevel)
-          // console.log(Math.round(average));
-          // colorPids(average);
-        }
+      onMicLevelChange (volumeLevel) {
+        this.micLevel = volumeLevel
       }
     }
   }
