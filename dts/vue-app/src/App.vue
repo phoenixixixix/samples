@@ -72,18 +72,10 @@
             </v-row>
             <v-row align="center" justify="center">
               <v-col>
-                <v-row>
-                  <v-col>
-                    <v-icon>mdi-microphone</v-icon>Microphone
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <div style="width: 100px">
-                      <v-progress-linear :value="micLevel" :active="micSwitch"></v-progress-linear>
-                    </div>
-                  </v-col>
-                </v-row>
+                <v-icon>mdi-microphone</v-icon>Microphone
+                <div style="width: 125px">
+                  <v-progress-linear :value="micLevel" :active="micSwitch"></v-progress-linear>
+                </div>
               </v-col>
               <v-col>
                 <v-switch
