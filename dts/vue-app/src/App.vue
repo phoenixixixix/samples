@@ -57,14 +57,10 @@
             </div>
           </v-col>
           <v-col>
-            <v-row align="center"
-                   justify="center">
+            <v-row align="center" justify="center">
               <v-col><v-icon>mdi-webcam</v-icon>Camera</v-col>
               <v-col>
-                <v-switch
-                  v-model="cameraSwitch"
-                  @change="onCameraToggle"
-                ></v-switch>
+                <v-switch v-model="cameraSwitch" ></v-switch>
               </v-col>
             </v-row>
             <v-row align="center" justify="center">
@@ -75,10 +71,7 @@
                 </div>
               </v-col>
               <v-col>
-                <v-switch
-                  v-model="micSwitch"
-                  @change="onMicToggle"
-                ></v-switch>
+                <v-switch v-model="micSwitch" ></v-switch>
               </v-col>
             </v-row>
             <v-row align="center" justify="center">
@@ -87,11 +80,14 @@
                   <v-col>
                     <v-icon>mdi-wifi</v-icon>Connectivity
                   </v-col>
+                  <v-col v-if="requestAverageTime">
+                    {{ requestAverageTime }}ms
+                  </v-col>
                 </v-row>
                 <v-row>
                   <v-col>
                     <div style="width: 100%">
-                      <v-progress-linear :value="0"></v-progress-linear>
+                      <v-progress-linear :indeterminate="true" :active="testInProgress"></v-progress-linear>
                     </div>
                   </v-col>
                 </v-row>
@@ -117,7 +113,7 @@
             </v-row>
             <v-row align="center">
               <v-col>
-                <v-btn :block="true">Run Test</v-btn>
+                <v-btn :block="true" @click="testConnection">Run Test</v-btn>
               </v-col>
             </v-row>
           </v-col>
@@ -154,6 +150,13 @@
     watch: {
       connectivityUrl(value) {
         localStorage.connectivityUrl = value
+      },
+      micSwitch (value) {
+        if(value) {
+          this.startListeningToMic()
+        } else {
+          this.stopListeningToMic()
+        }
       }
     },
     data () {
@@ -164,7 +167,9 @@
         micSwitch: true,
         connectivityUrl: 'https://jetthoughts.com',
         testUrl: null,
-        connectivityUrlValid: true
+        connectivityUrlValid: true,
+        testInProgress: false,
+        requestAverageTime: null
       }
     },
     components: {
@@ -173,13 +178,6 @@
     methods: {
       toggleSideMenu () {
         this.sideMenuOpened = !this.sideMenuOpened
-      },
-      onMicToggle (value) {
-        if(value) {
-          this.startListeningToMic()
-        } else {
-          this.stopListeningToMic()
-        }
       },
       startListeningToMic () {
         navigator.mediaDevices.getUserMedia({ audio: true, video: false })
@@ -191,13 +189,6 @@
             track.stop();
           })
         })
-      },
-      onCameraToggle (value) {
-        if(value) {
-          this.$refs.webcam.start()
-        } else {
-          this.$refs.webcam.stop()
-        }
       },
       onMicLevelChange (volumeLevel) {
         this.micLevel = volumeLevel
@@ -217,10 +208,28 @@
         axios
           .post('https://broolik.ml/api/v1/links', null, { params: { url: this.connectivityUrl } })
           .then(response => {
-            console.log(response.data)
             this.testUrl = response.data.last_url
           })
           .catch(() => this.testUrl = null)
+      },
+      testConnection () {
+        this.testInProgress = true
+        let timings = [0]
+        const tries = 3
+        for (let i = 0; i < tries; i++) {
+          const startTime = (new Date()).getTime()
+          fetch(this.testUrl, { cache: 'no-cache', mode: 'no-cors' })
+            .then(() => {
+              const endTime = (new Date()).getTime()
+              const requestTime = endTime - startTime
+              timings.push(requestTime)
+              if (i >= tries - 1) {
+                this.testInProgress = false
+                this.requestAverageTime = Math.round(timings.reduce((a, b) => a + b) / tries)
+              }
+            })
+            .catch(() => this.testInProgress = false)
+        }
       }
     }
   }
