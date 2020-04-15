@@ -8,7 +8,7 @@
       <v-list dense>
         <v-list-item link>
           <v-list-item-action>
-            <v-icon>mdi-camera</v-icon>
+            <v-icon>mdi-webcam</v-icon>
           </v-list-item-action>
 
           <v-list-item-content>
@@ -59,7 +59,7 @@
           <v-col>
             <v-row align="center"
                    justify="center">
-              <v-col><v-icon>mdi-camera</v-icon>Camera</v-col>
+              <v-col><v-icon>mdi-webcam</v-icon>Camera</v-col>
               <v-col>
                 <v-switch
                   v-model="cameraSwitch"
@@ -98,6 +98,7 @@
                 <v-row>
                   <v-col>
                     <v-text-field
+                            prepend-icon="mdi-earth"
                             placeholder="URL"
                             @blur="onConnectivityUrlChange"
                             :value="connectivityUrl"/>
