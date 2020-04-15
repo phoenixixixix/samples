@@ -95,6 +95,21 @@
                     </div>
                   </v-col>
                 </v-row>
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                            placeholder="URL"
+                            @blur="onConnectivityUrlChange"
+                            :value="connectivityUrl"/>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <div>Url for test: </div>
+                    <v-chip v-if="testUrl" color="success"><pre>{{ testUrl }}</pre></v-chip>
+                    <v-chip v-else color="error">Not found</v-chip>
+                  </v-col>
+                </v-row>
               </v-col>
             </v-row>
             <v-row align="center">
@@ -119,6 +134,7 @@
 </template>
 
 <script>
+  import axios from "axios"
   import { WebCam } from 'vue-cam-vision'
   import { addVolumeLevelListener } from './lib/soundUtils.js'
 
@@ -126,6 +142,7 @@
     name: 'AppVue',
     mounted () {
       this.startListeningToMic()
+      this.getUrlInfo()
     },
     data () {
       return {
@@ -133,6 +150,8 @@
         sideMenuOpened: false,
         cameraSwitch: true,
         micSwitch: true,
+        connectivityUrl: 'https://jetthoughts.com',
+        testUrl: null
       }
     },
     components: {
@@ -169,6 +188,22 @@
       },
       onMicLevelChange (volumeLevel) {
         this.micLevel = volumeLevel
+      },
+      onConnectivityUrlChange (event) {
+        const value = event.target.value
+        if(value !== this.connectivityUrl) {
+          this.connectivityUrl = event.target.value
+          this.getUrlInfo()
+        }
+      },
+      getUrlInfo () {
+        axios
+          .post('https://broolik.ml/api/v1/links', null, { params: { url: this.connectivityUrl } })
+          .then(response => {
+            console.log(response.data)
+            this.testUrl = response.data.last_url
+          })
+          .catch(() => this.testUrl = null)
       }
     }
   }
