@@ -100,6 +100,8 @@
                     <v-text-field
                             prepend-icon="mdi-earth"
                             placeholder="URL"
+                            :success="connectivityUrlValid"
+                            :error="!connectivityUrlValid"
                             @blur="onConnectivityUrlChange"
                             :value="connectivityUrl"/>
                   </v-col>
@@ -137,7 +139,8 @@
 <script>
   import axios from "axios"
   import { WebCam } from 'vue-cam-vision'
-  import { addVolumeLevelListener } from './lib/soundUtils.js'
+  import { addVolumeLevelListener } from './lib/utils/sound.js'
+  import { isValidUrl } from './lib/utils/string.js'
 
   export default {
     name: 'AppVue',
@@ -152,7 +155,8 @@
         cameraSwitch: true,
         micSwitch: true,
         connectivityUrl: 'https://jetthoughts.com',
-        testUrl: null
+        testUrl: null,
+        connectivityUrlValid: true
       }
     },
     components: {
@@ -193,8 +197,12 @@
       onConnectivityUrlChange (event) {
         const value = event.target.value
         if(value !== this.connectivityUrl) {
-          this.connectivityUrl = event.target.value
-          this.getUrlInfo()
+          this.connectivityUrl = value
+          this.connectivityUrlValid = isValidUrl(value)
+
+          if (this.connectivityUrlValid) {
+            this.getUrlInfo()
+          }
         }
       },
       getUrlInfo () {
