@@ -146,7 +146,15 @@
     name: 'AppVue',
     mounted () {
       this.startListeningToMic()
+      if (localStorage.connectivityUrl) {
+        this.connectivityUrl = localStorage.connectivityUrl
+      }
       this.getUrlInfo()
+    },
+    watch: {
+      connectivityUrl(value) {
+        localStorage.connectivityUrl = value
+      }
     },
     data () {
       return {
