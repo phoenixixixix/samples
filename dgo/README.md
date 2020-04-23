@@ -29,16 +29,17 @@ Examples of scripts that were written using TDD technology:
 
 # translations.yml - resulting file
 en:
-	pets:
-		types:
-			cat: Cat
-			dog: Dog
-		title: My lovely pets
-	actions:
-		add: Add
-		remove: Remove
-	language: <strong>Language</strong>
+  pets:
+    types:
+      cat: Cat
+        dog: Dog
+    title: My lovely pets
+  actions:
+    add: Add
+    remove: Remove
+  language: <strong>Language</strong>
 ```
 
 Main code you can find in: `/yaml_formatter/lib/yaml_formatter.rb`
+
 Tests in `/yaml_formatter/spec/lib/yaml_formatter_spec.rb`
