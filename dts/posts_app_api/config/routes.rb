@@ -7,7 +7,36 @@ Rails.application.routes.draw do
         resources :comments, only: :index
       end
 
+      resources :my_likes, only: :index
       resources :sessions, only: :create
+    end
+
+    namespace :jbuilder do
+      resources :posts, only: :index
+    end
+
+    namespace :jbuilder_fragment_cache do
+      resources :posts, only: :index
+    end
+
+    namespace :simple_serializer do
+      resources :posts, only: :index
+    end
+
+    namespace :simple_serializer_cached do
+      resources :posts, only: :index
+    end
+
+    namespace :fast_jsonapi_serializer do
+      resources :posts, only: :index
+    end
+
+    namespace :fast_jsonapi_serializer_cached do
+      resources :posts, only: :index
+    end
+
+    namespace :fast_jsonapi_serializer_cached_http_cache do
+      resources :posts, only: :index
     end
   end
 

@@ -4,24 +4,22 @@
   "properties": {
     "collection": {
       "type": "object",
-      "required": ["data", "total_pages", "current_page"],
+      "required": ["data", "total_count"],
       "properties": {
         "data": {
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["id", "body", "likes_count", "published_at", "liked_by_me"],
+            "required": ["id", "body", "likes_count", "published_at"],
             "properties": {
               "id": { "type": "integer" },
               "body": { "type": "string" },
               "likes_count": { "type": "integer" },
-              "published_at": { "type": "date-time" },
-              "liked_by_me": { "type": "boolean" }
+              "published_at": { "type": "date-time" }
             }
           }
         },
-        "total_pages": { "type": "integer" },
-        "current_page": { "type": "integer" }
+        "total_count": { "type": "integer" }
       }
     }
   }

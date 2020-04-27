@@ -1,22 +1,20 @@
 # frozen_string_literal: true
 
 class PostCarrier < SimpleDelegator
-  def initialize(post, user, liked_posts: nil)
-    super(post)
-    @user = user
-    @liked_posts = liked_posts
+  def self.wrap(posts)
+    posts.map { |post| new(post) }
   end
 
-  def self.wrap(posts, user)
-    liked_posts = user ? user.likes.where(post: posts.pluck(:id)).pluck(:post_id) : nil
-    posts.map { |post| new(post, user, liked_posts: liked_posts) }
-  end
-
-  def liked_by_me?
-    return false unless @user
-    return post.likes.where(user: @user).exists? unless @liked_posts
-
-    @liked_posts.include?(post.id)
+  def to_hash
+    {
+      id: id,
+      type: 'post',
+      attributes: {
+        body: body,
+        likes_count: likes_count,
+        published_at: created_at
+      }
+    }
   end
 
   def likes_count

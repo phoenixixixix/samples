@@ -49,18 +49,6 @@ RSpec.describe 'Api::V1::Posts', type: :request do
           expect(liked_posts).to be_empty
         end
       end
-
-      context 'when user is authenticated' do
-        it 'shows liked by me flag for a liked post' do
-          get '/api/v1/posts', headers: auth_headers(user)
-
-          liked_posts = parsed_response_body[:collection][:data].select { |post| post['liked_by_me'] }
-          liked_posts_ids = liked_posts.map { |post| post['id'] }
-
-          expect(liked_posts_ids).not_to be_empty
-          expect(liked_posts_ids).to match_array(@liked_by_user.map(&:id))
-        end
-      end
     end
 
     describe 'likes count for posts' do
@@ -89,10 +77,10 @@ RSpec.describe 'Api::V1::Posts', type: :request do
 
     describe 'pagination' do
       before do
-        FactoryBot.create_list(:post, 138)
+        FactoryBot.create_list(:post, 550)
         @request_path = '/api/v1/posts'
-        @total_records = 138
-        @per_page = 20
+        @total_records = 550
+        @per_page = 500
       end
 
       it_behaves_like 'paginated collection response'
@@ -110,9 +98,9 @@ RSpec.describe 'Api::V1::Posts', type: :request do
 
         posts_dates = parsed_response_body[:collection][:data].map { |comment| comment['published_at'] }
         expected_dates_order = [
-          '2020-03-25T18:28:42.956Z',
+          '2020-03-27T18:28:42.956Z',
           '2020-03-26T18:28:42.956Z',
-          '2020-03-27T18:28:42.956Z'
+          '2020-03-25T18:28:42.956Z'
         ]
         expect(posts_dates).to eq(expected_dates_order)
       end

@@ -4,7 +4,7 @@
   "properties": {
     "collection": {
       "type": "object",
-      "required": ["data", "total_pages", "current_page"],
+      "required": ["data", "total_count"],
       "properties": {
         "data": {
           "type": "array",
@@ -26,8 +26,7 @@
             }
           }
         },
-        "total_pages": { "type": "integer" },
-        "current_page": { "type": "integer" }
+        "total_count": { "type": "integer" }
       }
     }
   }
