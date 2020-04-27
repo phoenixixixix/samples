@@ -70,7 +70,15 @@ HTTP/1.1 401 Unauthorized
 
 #### Posts list
 
-Path: `/api/v1/posts`
+Paths: 
+ - `/api/v1/posts`
+ - `/api/jbuilder/posts`
+ - `/api/jbuilder_fragment_cache/posts`
+ - `/api/simple_serializer/posts`
+ - `/api/simple_serializer_cached/posts`
+ - `/api/fast_jsonapi_serializer/posts`
+ - `/api/fast_jsonapi_serializer_cached/posts`
+ - `/api/fast_jsonapi_serializer_cached_http_cache/posts`
 
 Method: `GET`
 
@@ -78,34 +86,39 @@ Requires authentication: `no`
 
 Arguments:
  * `page` - (integer) page number to return from the collection
- * `per_page` - (integer) number of posts entries per page (upto 100)
 
 Response schema:
 ```json
 {
   "type": "object",
-  "required": ["collection"],
+  "required": ["data", "meta"],
   "properties": {
-    "collection": {
-      "type": "object",
-      "required": ["data", "total_pages", "current_page"],
-      "properties": {
-        "data": {
-          "type": "array",
-          "items": {
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "attributes"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string" },
+          "relationships": { "type": "object" },
+          "attributes": {
             "type": "object",
-            "required": ["id", "body", "likes_count", "published_at", "liked_by_me"],
+            "required": ["body", "likes_count", "published_at"],
             "properties": {
-              "id": { "type": "integer" },
               "body": { "type": "string" },
               "likes_count": { "type": "integer" },
-              "published_at": { "type": "date-time" },
-              "liked_by_me": { "type": "boolean" }
+              "published_at": { "type": "date-time" }
             }
           }
-        },
-        "total_pages": { "type": "integer" },
-        "current_page": { "type": "integer" }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": ["total_count"],
+      "properties": {
+        "total_count": { "type": "integer" }
       }
     }
   }
@@ -114,155 +127,36 @@ Response schema:
 
 Curl example:
 ```bash
-curl -H "Authorization: Token dWZJs82lVl2aFlG2" -H "Content-Type: application/json" http://localhost:3000/api/v1/posts?page=2
+curl -H "Content-Type: application/json" http://localhost:3000/api/v1/posts?page=2
 ```
 ```json
 {
-  "collection": {
-    "data": [
-      {
-        "id": 21,
-        "body": "Consequat mauris nunc congue nisi vitae.",
-        "likes_count": 4,
-        "published_at": "2020-04-07T20:45:44.962Z",
-        "liked_by_me": false
+  "data": [
+    {
+      "id": "500",
+      "type": "post",
+      "attributes": {
+        "id": 500,
+        "body": "Ipsum suspendisse ultrices gravida dictum fusce ut placerat orci. Lorem ipsum dolor sit amet consectetur adipiscing elit.",
+        "likes_count": 22,
+        "published_at": "2020-04-26T20:48:40.901Z"
       },
-      {
-        "id": 22,
-        "body": "Non pulvinar neque laoreet suspendisse interdum consectetur libero.",
-        "likes_count": 1,
-        "published_at": "2020-04-07T20:45:44.982Z",
-        "liked_by_me": false
+      "relationships": {}
+    },
+    {
+      "id": "499",
+      "type": "post",
+      "attributes": {
+        "id": 499,
+        "body": "Sed faucibus turpis in eu mi bibendum neque egestas. Augue ut lectus arcu bibendum at varius vel.",
+        "likes_count": 23,
+        "published_at": "2020-04-26T20:48:40.897Z"
       },
-      {
-        "id": 23,
-        "body": "Sollicitudin tempor id eu nisl nunc mi ipsum faucibus.",
-        "likes_count": 0,
-        "published_at": "2020-04-07T20:45:45.001Z",
-        "liked_by_me": false
-      },
-      {
-        "id": 24,
-        "body": "Tortor condimentum lacinia quis vel eros donec.",
-        "likes_count": 5,
-        "published_at": "2020-04-07T20:45:45.019Z",
-        "liked_by_me": true
-      },
-      {
-        "id": 25,
-        "body": "Netus et malesuada fames ac turpis egestas integer eget.",
-        "likes_count": 2,
-        "published_at": "2020-04-07T20:45:45.053Z",
-        "liked_by_me": false
-      },
-      {
-        "id": 26,
-        "body": "Sem integer vitae justo eget magna fermentum.",
-        "likes_count": 3,
-        "published_at": "2020-04-07T20:45:45.073Z",
-        "liked_by_me": false
-      },
-      {
-        "id": 27,
-        "body": "Posuere morbi leo urna molestie at.",
-        "likes_count": 5,
-        "published_at": "2020-04-07T20:45:45.096Z",
-        "liked_by_me": true
-      },
-      {
-        "id": 28,
-        "body": "Nec nam aliquam sem et tortor consequat id porta nibh.",
-        "likes_count": 0,
-        "published_at": "2020-04-07T20:45:45.118Z",
-        "liked_by_me": false
-      },
-      {
-        "id": 29,
-        "body": "Id donec ultrices tincidunt arcu non.",
-        "likes_count": 1,
-        "published_at": "2020-04-07T20:45:45.140Z",
-        "liked_by_me": false
-      },
-      {
-        "id": 30,
-        "body": "Mattis molestie a iaculis at erat pellentesque adipiscing commodo.",
-        "likes_count": 0,
-        "published_at": "2020-04-07T20:45:45.161Z",
-        "liked_by_me": false
-      },
-      {
-        "id": 31,
-        "body": "Dapibus ultrices in iaculis nunc.",
-        "likes_count": 3,
-        "published_at": "2020-04-07T20:45:45.182Z",
-        "liked_by_me": false
-      },
-      {
-        "id": 32,
-        "body": "Ipsum suspendisse ultrices gravida dictum fusce ut placerat orci.",
-        "likes_count": 5,
-        "published_at": "2020-04-07T20:45:45.200Z",
-        "liked_by_me": true
-      },
-      {
-        "id": 33,
-        "body": "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-        "likes_count": 1,
-        "published_at": "2020-04-07T20:45:45.217Z",
-        "liked_by_me": false
-      },
-      {
-        "id": 34,
-        "body": "Sed faucibus turpis in eu mi bibendum neque egestas.",
-        "likes_count": 4,
-        "published_at": "2020-04-07T20:45:45.236Z",
-        "liked_by_me": false
-      },
-      {
-        "id": 35,
-        "body": "Augue ut lectus arcu bibendum at varius vel.",
-        "likes_count": 2,
-        "published_at": "2020-04-07T20:45:45.253Z",
-        "liked_by_me": false
-      },
-      {
-        "id": 36,
-        "body": "Tortor id aliquet lectus proin.",
-        "likes_count": 1,
-        "published_at": "2020-04-07T20:45:45.272Z",
-        "liked_by_me": false
-      },
-      {
-        "id": 37,
-        "body": "In nulla posuere sollicitudin aliquam ultrices sagittis orci a.",
-        "likes_count": 3,
-        "published_at": "2020-04-07T20:45:45.290Z",
-        "liked_by_me": false
-      },
-      {
-        "id": 38,
-        "body": "Habitasse platea dictumst vestibulum rhoncus est.",
-        "likes_count": 1,
-        "published_at": "2020-04-07T20:45:45.310Z",
-        "liked_by_me": false
-      },
-      {
-        "id": 39,
-        "body": "Amet luctus venenatis lectus magna.",
-        "likes_count": 5,
-        "published_at": "2020-04-07T20:45:45.327Z",
-        "liked_by_me": true
-      },
-      {
-        "id": 40,
-        "body": "Purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae.",
-        "likes_count": 0,
-        "published_at": "2020-04-07T20:45:45.341Z",
-        "liked_by_me": false
-      }
-    ],
-    "total_pages": 3,
-    "current_page": 2
+      "relationships": {}
+    }
+  ],
+  "meta": {
+    "total_count": 1000
   }
 }
 ```
@@ -282,6 +176,41 @@ Response: `HTTP/1.1 200 OK`
 Curl example:
 ```bash
 curl -H "Authorization: Token fNrGWfVy5N7eYg0d" -H "Content-Type: application/json" -X POST http://localhost:3000/api/v1/posts/19/toggle_like
+```
+
+#### Current user likes
+
+Path: `/api/v1/my_likes`
+
+Method: `GET`
+
+Requires authentication: `yes`
+
+Arguments:
+ * `page` - (integer) page number same as for posts
+
+Response schema:
+```json
+{
+  "type": "object",
+  "required": ["liked_posts"],
+  "properties": {
+    "liked_posts": {
+      "type": "array",
+      "items": { "type": "integer" }
+    }
+  }
+}
+```
+
+Curl example:
+```bash
+curl -H "Authorization: Token tDDozs_X6mUK-p3k" -H "Content-Type: application/json" http://localhost:3000/api/v1/my_likes
+```
+```json
+{
+  "liked_posts": [503,505,507,510,512,515,521,524,528,529,530]
+}
 ```
 
 #### Post comments
