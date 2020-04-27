@@ -1,10 +1,11 @@
-json.data @posts_carrier.page_scope do |post|
-  json.id post.id
+json.data @posts_carrier.posts do |post|
+  json.id post.id.to_s
   json.type 'post'
   json.attributes do
     json.extract! post, :body, :likes_count
     json.published_at post.created_at
   end
+  json.relationships({})
 end
 
 json.meta do

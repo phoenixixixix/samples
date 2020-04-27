@@ -1,18 +1,19 @@
 {
   "type": "object",
-  "required": ["collection"],
+  "required": ["data", "meta"],
   "properties": {
-    "collection": {
-      "type": "object",
-      "required": ["data", "total_count"],
-      "properties": {
-        "data": {
-          "type": "array",
-          "items": {
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "attributes"],
+        "properties": {
+          "id": { "type": "integer" },
+          "type": { "type": "string" },
+          "attributes": {
             "type": "object",
-            "required": ["id", "body", "created_at", "created_by"],
+            "required": ["body", "created_at", "created_by"],
             "properties": {
-              "id": { "type": "integer" },
               "body": { "type": "string" },
               "created_at": { "type": "date-time" },
               "created_by": {
@@ -25,7 +26,13 @@
               }
             }
           }
-        },
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": ["total_count"],
+      "properties": {
         "total_count": { "type": "integer" }
       }
     }

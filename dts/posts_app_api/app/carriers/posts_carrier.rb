@@ -11,7 +11,7 @@ class PostsCarrier
   end
 
   def total_count
-    @posts_scope.count
+    @posts_scope.total_count
   end
 
   def cache_key
@@ -38,8 +38,6 @@ class PostsCarrier
     }
     PostSerializer.new(@posts_scope, options).serialized_json
   end
-
-  private
 
   def posts
     @posts_scope.map { |post| PostCarrier.new(post) }

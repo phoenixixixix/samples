@@ -24,7 +24,7 @@ RSpec.describe 'Api::V1::Comments', type: :request do
       it 'returns comments for a post' do
         get "/api/v1/posts/#{post.id}/comments"
 
-        comments = parsed_response_body[:collection][:data]
+        comments = parsed_response_body[:data]
         expect(comments.size).to eq(13)
         expect(comments.map { |comment| comment['id'] }).to match_array(post.comments.map(&:id))
       end
@@ -46,9 +46,9 @@ RSpec.describe 'Api::V1::Comments', type: :request do
       it 'returns comment creator info' do
         get "/api/v1/posts/#{@jane_comment.post.id}/comments"
 
-        comment = parsed_response_body[:collection][:data].detect { |entry| entry['id'] == @jane_comment.id }
-        expect(comment['created_by']['id']).to eq(jane.id)
-        expect(comment['created_by']['name']).to eq('Jane Smith')
+        comment = parsed_response_body[:data].detect { |entry| entry['id'] == @jane_comment.id }
+        expect(comment['attributes']['created_by']['id']).to eq(jane.id)
+        expect(comment['attributes']['created_by']['name']).to eq('Jane Smith')
       end
     end
 
@@ -64,7 +64,7 @@ RSpec.describe 'Api::V1::Comments', type: :request do
       it 'returns comments in order of creation' do
         get "/api/v1/posts/#{post.id}/comments"
 
-        comment_dates = parsed_response_body[:collection][:data].map { |comment| comment['created_at'] }
+        comment_dates = parsed_response_body[:data].map { |comment| comment['attributes']['created_at'] }
         expected_dates_order = [
           '2020-03-25T18:28:42.956Z',
           '2020-03-26T18:28:42.956Z',

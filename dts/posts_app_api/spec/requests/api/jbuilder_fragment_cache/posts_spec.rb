@@ -2,12 +2,12 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Api::V1::Posts', type: :request do
+RSpec.describe 'Api::JbuilderFragmentCache::Posts', type: :request do
   include RequestHelpers
   include AuthHelper
 
   before(:all) do
-    @endpoint_path = '/api/v1/posts'
+    @endpoint_path = '/api/jbuilder_fragment_cache/posts'
   end
 
   it_behaves_like 'posts endpoint'

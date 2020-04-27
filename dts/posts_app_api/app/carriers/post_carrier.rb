@@ -7,13 +7,14 @@ class PostCarrier < SimpleDelegator
 
   def to_hash
     {
-      id: id,
+      id: id.to_s,
       type: 'post',
       attributes: {
         body: body,
         likes_count: likes_count,
         published_at: created_at
-      }
+      },
+      relationships: {}
     }
   end
 
