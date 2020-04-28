@@ -41,6 +41,22 @@ Key implementation details can be found in:
  - [PostsCarrier](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/carriers/posts_carrier.rb) & [PostCarrier](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/carriers/post_carrier.rb) - posts page retrieving and serialization logic;
  - [PostSerializer](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/serializers/post_serializer.rb) - `fast_jsonapi` backed serializer; 
 
+### Implementations benchmarking
+
+Tested with `ab` tool. Fetching posts feed page with 500 entries.
+
+    ab -c 1 -n 1000 http://localhost:3000/api/jbuilder/posts 
+
+| Implementation | Requests per second | Time per request |
+|----------------|---------------------|------------------|
+| jbuilder | 17.95 | 55.706 ms |
+| jbuilder fragment cache | 9.94 | 100.591 ms |
+| simple serializer | 20.50 | 48.772 ms |
+| simple serializer with caching | 30.82 | 32.447 ms |
+| fast_jsonapi | 14.39 | 69.488 ms |
+| fast_jsonapi with caching | 31.44 | 31.803 ms |
+| http cached | 155.34 | 6.438 ms |
+
 ## Requirements
 
  * Ruby 2.6.5
