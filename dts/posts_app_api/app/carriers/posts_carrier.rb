@@ -1,26 +1,14 @@
 # frozen_string_literal: true
 
 class PostsCarrier
+  attr_reader :posts_scope
+
+  delegate :cache_key, :cache_version, :total_count,
+           to: :@posts_scope
+
   def initialize(posts_scope, page: nil)
     @page = page || 1
     @posts_scope = posts_scope.page(page)
-  end
-
-  def page_scope
-    @posts_scope
-  end
-
-  def total_count
-    @posts_scope.total_count
-  end
-
-  def cache_key
-    {
-      resource: 'posts',
-      page: @page,
-      count: @posts_scope.count,
-      last_modified: @posts_scope.maximum(:updated_at)
-    }
   end
 
   def to_hash

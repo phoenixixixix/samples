@@ -2,15 +2,15 @@
 
 module Api
   module V1
-    class PostsController < BaseController
+    class PostsController < BasePostsController
       def index
         @posts_carrier = PostsCarrier.new(
           Post.ordered_chronologically,
           page: params[:page]
         )
 
-        if stale?(@posts_carrier.page_scope, public: true) # rubocop:disable Style/GuardClause:
-          response_json = Rails.cache.fetch(@posts_carrier.cache_key) do
+        if stale?(@posts_carrier.posts_scope, public: true) # rubocop:disable Style/GuardClause:
+          response_json = Rails.cache.fetch(@posts_carrier.cache_key, version: @posts_carrier.cache_version) do
             @posts_carrier.to_hash
           end
           render json: response_json
