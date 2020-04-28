@@ -7,6 +7,8 @@ The key point of this task is to design and implement an API for a hypothetical 
 posts/comments and ability to like a post are implemented here and covered with request tests, while out of the scope things like users authentication 
 endpoint is more like a mock up.
 
+### [Demo App](https://sample-posts.herokuapp.com/)
+
 ## Requirements
 
  * Ruby 2.6.5
