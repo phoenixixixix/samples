@@ -9,6 +9,38 @@ endpoint is more like a mock up.
 
 ### [Demo App](https://sample-posts.herokuapp.com/)
 
+### API Design
+
+To fullfill the performance requirement API is designed with the following
+in mind:
+
+ - Data common for all users and data specific for a certain user should be served by
+ separate endpoints. That way responses payload can be cached inside the app and in users' browser.
+ In this app we have posts feed which is common for all users and served by `/posts` endpoint and 
+ list of liked posts specific for each individual user which is served by `/my_likes` endpoint.   
+ - Posts feed is served paginated accepting page number parameter. Posts endpoint doesn't accept per_page parameter.
+ Also we use relatively large number of posts per page which should lead to smaller number of requests to the endpoint.
+ 
+
+### Implementation approaches
+
+A set of different tools and approaches is tested in this app. 
+For json payload rendering used:
+ - `jbuilder` template ([controller](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/controllers/api/jbuilder/posts_controller.rb), [view](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/views/api/jbuilder/posts/index.json.jbuilder))
+ - `fast_jsonapi` backed serializer ([controller](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/controllers/api/fast_jsonapi_serializer/posts_controller.rb), [serializer](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/serializers/post_serializer.rb))
+ - self implemented serializer ([controller](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/controllers/api/simple_serializer/posts_controller.rb), [serializer](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/carriers/post_carrier.rb))
+ 
+Used caching techniques:
+ - `jbuilder` template fragment caching ([controller](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/controllers/api/jbuilder_fragment_cache/posts_controller.rb), [view](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/views/api/jbuilder_fragment_cache/posts/index.json.jbuilder))
+ - `fast_jsonapi` serializer caching ([serializer](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/serializers/post_serializer.rb))
+ - `Rails.cache` for caching serialized json response payload ([controller](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/controllers/api/fast_jsonapi_serializer_cached/posts_controller.rb))
+ - Client side caching with Rails conditional GET ([controller](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/controllers/api/fast_jsonapi_serializer_cached_http_cache/posts_controller.rb))
+ 
+Key implementation details can be found in:
+ - `PostsController`s in [dedicated namespaces](https://github.com/jetthoughts/samples/tree/master/dts/posts_app_api/app/controllers/api) for different approaches;
+ - [PostsCarrier](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/carriers/posts_carrier.rb) & [PostCarrier](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/carriers/post_carrier.rb) - posts page retrieving and serialization logic;
+ - [PostSerializer](https://github.com/jetthoughts/samples/blob/master/dts/posts_app_api/app/serializers/post_serializer.rb) - `fast_jsonapi` backed serializer; 
+
 ## Requirements
 
  * Ruby 2.6.5
