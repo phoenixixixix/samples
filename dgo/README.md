@@ -16,7 +16,7 @@ Examples of scripts that were written using TDD technology:
     ion
   ```
 
-3. yaml_formatter - library which transform the translations from simple format into a YAML file that can be used in the rails application.
+3. `yaml_formatter` - library which transform the translations from simple format into a YAML file that can be used in the rails application.
 
 ``` yml
 # translations_simple.yml
