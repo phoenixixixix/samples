@@ -3,8 +3,6 @@
 module Api
   module V1
     class PostsController < BaseController
-      before_action :authenticate_user!, only: [:toggle_like]
-
       def index
         @posts_carrier = PostsCarrier.new(
           Post.ordered_chronologically,
@@ -17,12 +15,6 @@ module Api
           end
           render json: response_json
         end
-      end
-
-      def toggle_like
-        post = Post.find(params[:id])
-
-        TogglePostLikeService.new(post, @current_user).perform
       end
     end
   end
