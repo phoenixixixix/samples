@@ -1,5 +1,19 @@
 # vue-app
 
+## Requirements
+
+Create a Vue.js (with Vuetify framework) app which mimics this interface:
+<img src="doc/requirements_ui.png" width="800px"/>
+
+#### Key features
+ 
+ - Show webcam video stream;
+ - Allow user to enable/disable webcam;
+ - Allow user to enable/disable microphone input;
+ - Show volume level of microphone;
+ - Add user input field with simple validation;
+ - Perform external API call from the component on load & on user action;
+
 ## Project setup
 ```
 yarn install
@@ -9,16 +23,3 @@ yarn install
 ```
 yarn serve
 ```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
