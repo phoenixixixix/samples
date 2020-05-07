@@ -21,10 +21,4 @@ class PostCarrier < SimpleDelegator
   def likes_count
     super.to_i
   end
-
-  private
-
-  def post
-    __getobj__
-  end
 end

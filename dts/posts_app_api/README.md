@@ -102,7 +102,7 @@ Response schema (on successful authentication):
 
 Curl example (successful):
 ```bash
-curl -d '{"email":"sara@example.com"}' -H "Content-Type: application/json" -X POST http://localhost:3000/api/v1/sessions
+curl -d '{"email":"user@example.com"}' -H "Content-Type: application/json" -X POST http://localhost:3000/api/v1/sessions
 
 Response:
 HTTP/1.1 200 OK
@@ -225,7 +225,7 @@ Response: `HTTP/1.1 200 OK`
 
 Curl example:
 ```bash
-curl -H "Authorization: Token fNrGWfVy5N7eYg0d" -H "Content-Type: application/json" -X POST http://localhost:3000/api/v1/posts/19/toggle_like
+curl -H "Authorization: Token tDDozs_X6mUK-p3k" -H "Content-Type: application/json" -X POST http://localhost:3000/api/v1/posts/900/toggle_like
 ```
 
 #### Current user likes

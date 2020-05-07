@@ -11,7 +11,9 @@ module Api
 
         # Since posts feed page is the same for all users we can set 'public' parameter to true
         # which will add header 'Cache-Control: public' to response headers
-        if stale?(@posts_carrier.posts_scope, public: true) # rubocop:disable Style/GuardClause:
+        expires_in 30.minutes, public: true
+        etag = "#{@posts_carrier.cache_key}-#{@posts_carrier.cache_version}"
+        if stale?(etag) # rubocop:disable Style/GuardClause:
           # Fetching posts page response from cache generating it on cache miss
           response_json = Rails.cache.fetch(@posts_carrier.cache_key, version: @posts_carrier.cache_version) do
             @posts_carrier.to_hash

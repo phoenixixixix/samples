@@ -4,7 +4,7 @@ class PostsCarrier
   attr_reader :posts_scope
 
   delegate :cache_key, :cache_version, :total_count,
-           to: :@posts_scope
+           to: :posts_scope
 
   def initialize(posts_scope, page: nil)
     @page = page || 1
@@ -28,6 +28,6 @@ class PostsCarrier
   end
 
   def posts
-    @posts_scope.map { |post| PostCarrier.new(post) }
+    PostCarrier.wrap(@posts_scope)
   end
 end
