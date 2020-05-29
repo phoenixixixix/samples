@@ -40,6 +40,10 @@ Rails.application.routes.draw do
     namespace :fast_jsonapi_serializer_cached_http_cache do
       resources :posts, only: :index, concerns: [:likeable]
     end
+
+    namespace :cursor do
+      resources :posts, only: :index, concerns: [:likeable]
+    end
   end
 
   root to: 'api/v1/posts#index', defaults: { format: :json }

@@ -90,14 +90,16 @@ posts.each do |post|
   end
 end
 
-puts 'Seeding comments'
+if ENV['SKIP_SEEDING_COMMENTS'] != '1'
+  puts 'Seeding comments'
 
-comment_number = 1
-posts.each do |post|
-  comments_count = rand(15)
-  comments_count.times.each do |comment_index|
-    user = users[comment_index % users.size]
-    Comment.create!(post: post, user: user, body: "Comment ##{comment_number}")
-    comment_number += 1
+  comment_number = 1
+  posts.each do |post|
+    comments_count = rand(15)
+    comments_count.times.each do |comment_index|
+      user = users[comment_index % users.size]
+      Comment.create!(post: post, user: user, body: "Comment ##{comment_number}")
+      comment_number += 1
+    end
   end
 end
